@@ -11,7 +11,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.bezkoder.springjwt.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
 
