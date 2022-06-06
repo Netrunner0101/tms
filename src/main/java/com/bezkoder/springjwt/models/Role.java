@@ -1,20 +1,23 @@
 package com.bezkoder.springjwt.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "idrole")
 public class Role {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Integer idrole;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 20)
   private ERole name;
 
   public Role() {
-
   }
 
   public Role(ERole name) {
@@ -22,11 +25,11 @@ public class Role {
   }
 
   public Integer getId() {
-    return id;
+    return idrole;
   }
 
   public void setId(Integer id) {
-    this.id = id;
+    this.idrole = id;
   }
 
   public ERole getName() {

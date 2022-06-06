@@ -1,5 +1,8 @@
 package com.bezkoder.springjwt.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,15 +12,16 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "users", 
+@Table(name = "users",
     uniqueConstraints = { 
       @UniqueConstraint(columnNames = "username"),
       @UniqueConstraint(columnNames = "email") 
     })
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "iduser")
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long iduser;
 
   @NotBlank
   @Size(max = 20)
@@ -32,10 +36,11 @@ public class User {
   @Size(max = 120)
   private String password;
 
+  // Faire attention quand on fait many to many ==> il faut une table intermiédiaire dans SQL SERVER
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(  name = "user_roles", 
-        joinColumns = @JoinColumn(name = "user_id"), 
-        inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @JoinTable(  name = "users_roles",
+        joinColumns = @JoinColumn(name = "iduser"),
+        inverseJoinColumns = @JoinColumn(name = "idrole"))
   private Set<Role> roles = new HashSet<>();
 
   public User() {
@@ -48,11 +53,11 @@ public class User {
   }
 
   public Long getId() {
-    return id;
+    return iduser;
   }
 
   public void setId(Long id) {
-    this.id = id;
+    this.iduser = iduser;
   }
 
   public String getUsername() {
