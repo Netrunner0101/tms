@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVersion;
+
 
 import com.bezkoder.springjwt.websecurityconfigurer.security.jwt.AuthEntryPointJwt;
 import com.bezkoder.springjwt.websecurityconfigurer.security.jwt.AuthTokenFilter;
@@ -32,13 +34,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
 
+  @Autowired
+  private BCryptPasswordEncoder bCryptPasswordEncoder;
+
   @Bean
   public AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
   }
 
- @Bean
- public PasswordEncoder passwordEncoderBean() {return new BCryptPasswordEncoder();}
+
 
   // Test autre méthode
   //@Bean
@@ -46,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-    authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoderBean());
+    authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
   }
 
   @Bean
@@ -66,4 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
   }
+
+  @Bean
+  public PasswordEncoder passwordEncoderBean() {return new BCryptPasswordEncoder();}
 }
